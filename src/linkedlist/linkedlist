@@ -1,0 +1,104 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//std::list : doubly linked list 
+//std::forward_list : singly linked list 
+// std::unordered_map / std::unordered_set : hashtable with separate chaining: chained with linked list 
+// std::queue : warps 
+
+struct ListNode {
+    int val;
+    ListNode* next;
+
+    //default struct
+    ListNode() : ListNode(0) {}
+
+    //constructer that took int as argument, 
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+
+//O(1)
+ListNode* create_new_list(int n) {
+    return new ListNode(n);
+}
+
+
+//O(n)
+ListNode* push_list(ListNode* head, int n){
+    if (!head) return new ListNode(n);
+    ListNode* curr = head;
+    while(curr->next != nullptr){
+        curr = curr->next;
+    }
+    curr->next = new ListNode(n);
+    
+    return head; 
+}
+
+//O(n)
+ListNode* pop_list(ListNode* head){
+    if (!head) return nullptr;
+
+    if (!head -> next){
+        delete(head);
+        return nullptr;
+    }
+    ListNode* current = head;
+    ListNode* next = head->next;
+
+    while(next-> next != nullptr){
+        current = next;
+        next = next->next;
+    }
+    
+    delete(next);
+    current->next = nullptr;
+
+    return current;
+}
+
+
+//O(1)
+ListNode* dequeue_list(ListNode* head){
+    if (!head) return nullptr;
+
+    ListNode* current = head->next;
+    delete(head);
+
+    return current;
+} 
+
+//O(1)
+ListNode* enqueue_list(ListNode* list, int n){
+    ListNode* current = new ListNode(n); 
+    current -> next = list;
+
+    return current;
+} 
+
+//O(n)
+void free_list(ListNode* head){
+    ListNode* current = head;
+
+    while(current != nullptr){
+        ListNode* next = current ->next;
+        delete(current);
+        current = next;
+    }
+
+}
+
+//O(n)
+ListNode* find_list(ListNode* head, int n){
+    ListNode* current = head;
+
+    while(current != nullptr){
+        if (current->val == n){
+            return current;
+        } 
+        current = current ->next;
+
+    }
+    return nullptr;
+}

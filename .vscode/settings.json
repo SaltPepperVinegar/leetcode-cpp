@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "linkedlist": "cpp",
+        "vector": "cpp",
+        "new": "cpp",
+        "list": "cpp"
+    }
+}
