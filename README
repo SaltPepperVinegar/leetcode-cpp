@@ -1,0 +1,27 @@
+# Configure & build
+cmake --preset=gcc-debug         # or clang-debug / clang-asan ...
+cmake --build --preset=build
+
+# Run
+./build/gcc-debug/your_app_cli
+
+# Tests
+ctest --test-dir build/gcc-debug -j
+
+# Static analysis
+clang-tidy --version
+# (CMake Tools will run clang-tidy automatically if configured)
+
+# Format
+clang-format -i $(git ls-files '*.cpp' '*.hpp' '*.h' '*.cc')
+
+# Address/UB Sanitizers
+cmake --preset=clang-asan && cmake --build --preset=build
+ASAN_OPTIONS=detect_leaks=1 ./build/clang-asan/your_app_cli
+
+# Valgrind (memory)
+valgrind --leak-check=full ./build/gcc-debug/your_app_cli
+
+# Coverage (gcc-coverage preset)
+ctest --test-dir build/gcc-coverage
+gcovr -r . --xml -o coverage.xml --html-details -o coverage.html

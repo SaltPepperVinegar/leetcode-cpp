@@ -1,0 +1,59 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "base",
+      "generator": "Ninja",
+      "binaryDir": "build/${presetName}",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "gcc-debug",
+      "inherits": "base",
+      "environment": { "CC": "gcc", "CXX": "g++" }
+    },
+    {
+      "name": "gcc-release",
+      "inherits": "base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
+      "environment": { "CC": "gcc", "CXX": "g++" }
+    },
+    {
+      "name": "clang-debug",
+      "inherits": "base",
+      "environment": { "CC": "clang", "CXX": "clang++" }
+    },
+    {
+      "name": "clang-asan",
+      "inherits": "clang-debug",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-fsanitize=address -fno-omit-frame-pointer",
+        "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address"
+      }
+    },
+    {
+      "name": "clang-ubsan",
+      "inherits": "clang-debug",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-fsanitize=undefined -fno-omit-frame-pointer",
+        "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=undefined"
+      }
+    },
+    {
+      "name": "gcc-coverage",
+      "inherits": "gcc-debug",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "--coverage",
+        "CMAKE_EXE_LINKER_FLAGS": "--coverage",
+        "ENABLE_TESTING": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "build", "configurePreset": "gcc-debug" },
+    { "name": "build-release", "configurePreset": "gcc-release" }
+  ],
+  "testPresets": [
+    { "name": "test", "configurePreset": "gcc-debug", "output": {"shortProgress": true} }
+  ]
+}
